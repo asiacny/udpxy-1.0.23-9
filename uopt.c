@@ -105,6 +105,7 @@ init_uopt( struct udpxy_opt* uo )
     assert( uo->cnt_type[0] );
 
     uo->tcp_nodelay = (flag_t)get_flagval( "UDPXY_TCP_NODELAY", 1);
+    uo->mng_ip = (int) getenv( "UDPXY_MNGIP");
     return rc;
 }
 

@@ -94,6 +94,9 @@ static volatile sig_atomic_t g_childexit = 0;
 
 static const int PID_RESET = 1;
 
+
+char gpeer_addr [128] = "#undef#";
+
 /*********************************************************/
 
 /* process client requests - implemented in sloop.c */
@@ -899,13 +902,35 @@ process_command( int new_sockfd, struct server_ctx* ctx )
         }
     }
     else if( 0 == strncmp( ctx->rq.cmd, CMD_STATUS, sizeof(ctx->rq.cmd) ) ) {
-        rc = report_status( new_sockfd, ctx, STAT_OPTIONS );
+	if (g_uopt.mng_ip != 0) {
+            const char* mngip = getenv("UDPXY_MNGIP");
+            if (strcmp(mngip, gpeer_addr) == 0) {
+                printf("ip granted\n");
+        	rc = report_status( new_sockfd, ctx, STAT_OPTIONS );
+            } else {
+		printf("ip denied\n");
+                send_http_response( new_sockfd, 404, "Fuck you" ); //pri spatne ip
+            }
+	} else {
+            rc = report_status( new_sockfd, ctx, STAT_OPTIONS );
+	}
     }
     else if( 0 == strncmp( ctx->rq.cmd, CMD_RESTART, sizeof(ctx->rq.cmd) ) ) {
-        (void) report_status( new_sockfd, ctx, RESTART_OPTIONS );
-
-        terminate_all_clients( ctx );
-        wait_all( ctx );
+        if (g_uopt.mng_ip != 0) {
+            const char* mngip = getenv("UDPXY_MNGIP");
+            if (strcmp(mngip, gpeer_addr) == 0) {
+                printf("ip granted\n");
+                (void) report_status( new_sockfd, ctx, RESTART_OPTIONS );
+                terminate_all_clients( ctx );
+                wait_all( ctx );
+            } else {
+		printf("ip denied\n");
+                send_http_response( new_sockfd, 404, "Fuck you" ); //pri spatne ip
+            }
+        } else {
+            (void) report_status( new_sockfd, ctx, RESTART_OPTIONS );
+	}
+        
     }
     else {
         TRACE( (void)tmfprintf( g_flog, "Unrecognized command [%s]"
@@ -952,13 +977,13 @@ accept_requests (int sockfd, tmfd_t* asock, size_t* alen)
             (void) close (new_sockfd); /* TODO: error-aware close */
             continue;
         }
-        /*
+        
         if (0 != set_timeouts(new_sockfd, new_sockfd, g_uopt.sr_tmout, 0,
             g_uopt.sw_tmout, 0)) {
             (void) close (new_sockfd);
             continue;
         }
-        */
+        
         if (wmark > 0) {
             if (0 != setsockopt (new_sockfd, SOL_SOCKET, SO_RCVLOWAT,
                     (char*)&wmark, sizeof(wmark))) {
@@ -986,6 +1011,7 @@ accept_requests (int sockfd, tmfd_t* asock, size_t* alen)
 
         (void) get_peerinfo (new_sockfd, peer_addr,
                 sizeof(peer_addr)-1, &peer_port);
+		  strcpy(gpeer_addr, peer_addr);
 
         TRACE( (void)tmfprintf( g_flog, "Accepted socket=[%d] from %s:%d "
             "n=%ld/nmax=%ld\n", new_sockfd, peer_addr, peer_port,
