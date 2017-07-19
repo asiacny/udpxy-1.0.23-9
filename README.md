@@ -9,9 +9,9 @@ modified udpxy to secure status page, you can now enter status page only from sp
 - make install
 
 # usage example:
-#####// run udpxy with public /status & /restart page
+##### run udpxy with public /status & /restart page, public stream
 - udpxy				
 
-#####// run udpxy with stricted access to /status & /restart page, only specific IP can enter /status & /restart page.
+##### run udpxy with stricted access to /status & /restart page, only specific IP can enter, public stream
 - UDPXY_MNGIP=192.168.1.1 udpxy	
 
