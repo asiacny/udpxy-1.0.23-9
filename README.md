@@ -2,7 +2,7 @@
 - [udpxy](https://github.com/pcherenkov/udpxy) is a UDP-to-HTTP multicast traffic relay daemon it forwards UDP traffic from a given multicast subscription to the requesting HTTP client
 -udpxy is released under GPL v.3
 
-- this modified version of udpxy with secure status page, you can now enter status page both, only from specific IP or with public access
+- this modified version of udpxy with secured status page, you can now enter status page both, only from specific IP or with public access
 
 # install instructions:
 - sudo apt-get install build-essentials
