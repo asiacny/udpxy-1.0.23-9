@@ -1,6 +1,6 @@
 # udpxy-1.0.23-9
 - [udpxy](https://github.com/pcherenkov/udpxy) is a UDP-to-HTTP multicast traffic relay daemon it forwards UDP traffic from a given multicast subscription to the requesting HTTP client
--udpxy is released under GPL v.3
+- udpxy is released under GPL v.3
 
 - this modified version of udpxy with secured status page, you can now enter status page both ways, only from specific IP or from everywhere. defined by enviroment variable UDPXY_MNGIP
 
