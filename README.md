@@ -13,7 +13,7 @@
 
 # usage example:
 ##### udpxy help usage
-- udpxy -h
+- udpxy
 
 ##### run udpxy with public /status & /restart page, public stream
 - udpxy	-someparameters			
