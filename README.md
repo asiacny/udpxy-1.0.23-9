@@ -15,9 +15,10 @@
 ##### udpxy help usage
 - udpxy
 
-##### run udpxy with public /status & /restart page, public stream
-- udpxy	-someparameters			
+##### run udpxy no daemon, with public /status & /restart page & public stream, client statistics, verbosed, listening on port 5555, input interface for HTTP requests is eth0, multicast interface for stream is eth1
+- udpxy	-T -S -v -p 5555 -a eth0 -m eth1
 
-##### run udpxy with stricted access to /status & /restart page, only specific IP can enter, public stream
-- UDPXY_MNGIP=192.168.1.1 udpxy	-someparameters
+##### run udpxy , only specific IP can enter, public stream
+##### run udpxy no daemon, with granted access to /status & /restart page only from IP 192.168.1.1, public stream, client statistics, verbosed, listening on port 5555, input interface for HTTP requests is eth0, multicast interface for stream is eth1
+- UDPXY_MNGIP=192.168.1.1 udpxy	-T -S -v -p 5555 -a eth0 -m eth1
 
